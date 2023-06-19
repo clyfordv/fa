@@ -130,6 +130,9 @@ struct VS_OUTPUT
     float4 mShadow              : TEXCOORD3;
     float3 mViewDirection        : TEXCOORD4;
     float4 mTexDecal            : TEXCOORD5;
+    // We store some texture scales here to be able to save some memory registers 
+    // in the pixel shader as the stratumTiles only have one float of actual data,
+    // but use four and we are pretty tight on register slots in the new shaders.
     float4 nearScales           : TEXCOORD6;
     float4 farScales            : TEXCOORD7;
 };
@@ -601,8 +604,6 @@ VS_OUTPUT TerrainVS( position_t p : POSITION0, uniform bool shadowed)
 {
     VS_OUTPUT result;
 
-    // We do this to be able to save some memory registers in the pixel shader as the Tiles only have
-    // one float of actual data, but use four and we are pretty tight on register slots sometimes.
     result.nearScales = float4(Stratum0AlbedoTile.x, Stratum1AlbedoTile.x, Stratum2AlbedoTile.x, Stratum3AlbedoTile.x);
     result.farScales =  float4(Stratum0NormalTile.x, Stratum1NormalTile.x, Stratum2NormalTile.x, Stratum3NormalTile.x);
 
@@ -1770,6 +1771,9 @@ float4 splatBlendNormal(float4 n1, float4 n2, float t2height, float opacity, uni
     float ma = max(height1, height2) - blurriness;
     float factor1 = max(height1 - ma, 0);
     float factor2 = max(height2 - ma, 0);
+    // These factors are to make low opacity normal maps more visible,
+    // as we notice small changes to the albedo maps more easily.
+    // The value of 0.5 is just eyeballed.
     float factor1modified = pow(factor1 / (factor1 + factor2), 0.5);
     float factor2modified = pow(factor2 / (factor1 + factor2), 0.5);
     return normalize(float4((n1.xy * factor1modified + n2.xy * factor2modified), n1.z, 0));
@@ -1943,7 +1947,7 @@ float4 TerrainPBRAlbedoPS ( VS_OUTPUT inV) : COLOR
     // height is now in the z coordinate
     float4 position = TerrainScale * inV.mTexWT;
 
-    // do arthmetics to get range from (0, 1) to (-1, 1) as normal maps store their values as (0, 1)
+    // do arithmetics to get range from (0, 1) to (-1, 1) as normal maps store their values as (0, 1)
     float3 normal = normalize(2 * SampleScreen(NormalSampler,inV.mTexSS).xyz - 1);
 
     float4 mask0 = tex2D(UtilitySamplerA, position.xy);
@@ -2000,8 +2004,9 @@ technique TerrainPBR <
     }
 }
 
-/* # Similar to TTerrainXP, but upperAlbedo is used for map-wide #
-   # textures and we use better water color calculations         # */
+/* # Similar to TTerrainXP, but upperAlbedo is used for map-wide      #
+   # textures and we use better water color calculations.             # 
+   # Uses only the upper half of the stratum masks for compatibility. # */
 
 float4 Terrain001AlbedoPS ( VS_OUTPUT inV) : COLOR
 {
@@ -2110,7 +2115,7 @@ float4 Terrain002AlbedoPS ( VS_OUTPUT inV) : COLOR
     // height is now in the z coordinate
     float4 position = TerrainScale * inV.mTexWT;
 
-    // do arthmetics to get range from (0, 1) to (-1, 1) as normal maps store their values as (0, 1)
+    // do arithmetics to get range from (0, 1) to (-1, 1) as normal maps store their values as (0, 1)
     float3 normal = normalize(2 * SampleScreen(NormalSampler,inV.mTexSS).xyz - 1);
 
     float4 mask0 = tex2D(UtilitySamplerA, position.xy);
