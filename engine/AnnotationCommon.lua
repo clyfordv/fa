@@ -4,6 +4,7 @@
 ---@meta
 
 ---@alias nonnil boolean | number | thread | table | string | userdata | lightuserdata | function
+---@alias filename string
 
 ---@class cfunction : function
 ---@class CScriptObject : userdata

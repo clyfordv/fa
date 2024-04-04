@@ -113,6 +113,7 @@ local cUnitGetBuildRate = cUnit.GetBuildRate
 ---@field Brain AIBrain
 ---@field buildBots? Unit[]
 ---@field Blueprint UnitBlueprint
+---@field UnitName string
 ---@field BuildEffectsBag TrashBag
 ---@field BuildArmManipulator? moho.BuilderArmManipulator
 ---@field Trash TrashBag

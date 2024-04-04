@@ -33,7 +33,10 @@
     "Lua.runtime.exportEnvDefault": true,
     "Lua.completion.autoRequire": false,
     "Lua.diagnostics.globals": [
-        "ScenarioInfo"
+        "moho",
+        "ScenarioInfo",
+        "GROUP",
+        "LOOPEIRERAFDADS"
     ],
 
     // used for grammar checks of changelog
