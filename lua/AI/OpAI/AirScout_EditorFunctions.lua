@@ -51,6 +51,15 @@ function AirScoutPatrolRandom(platoon)
     end
 end
 
+---@param platoonName string
+---@param delay number
+function AirScoutUnlockTimer(platoonName, delay)
+
+    WaitSeconds( delay )
+    --LOG('debugMatt:Scout unlocked '..platoonName..delay) 
+    ScenarioInfo.AMLockTable[platoonName] = false
+end
+
 --- AirScoutDeath = BuildCallback   doc = "Please work function docs."
 ---@param brain AIBrain default_brain
 ---@param platoon Platoon default_platoon
@@ -65,13 +74,4 @@ function AirScoutDeath(brain, platoon)
     local platoonName = platoon.PlatoonData.PlatoonName or 'nothing'
     --LOG('debugMatt:Scout died '..platoonName) 
     ForkThread( AirScoutUnlockTimer, platoonName, delay )
-end
-
----@param platoonName string
----@param delay number
-function AirScoutUnlockTimer(platoonName, delay)
-
-    WaitSeconds( delay )
-    --LOG('debugMatt:Scout unlocked '..platoonName..delay) 
-    ScenarioInfo.AMLockTable[platoonName] = false
 end

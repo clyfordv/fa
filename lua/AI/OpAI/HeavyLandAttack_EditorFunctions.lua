@@ -107,6 +107,27 @@ function HeavyLandAttackChildDefensive(aiBrain, master)
     end
 end
 
+---@param aiBrain AIBrain
+---@return boolean
+function CheckDefensiveBuildable(aiBrain)
+    local armyIndex = aiBrain:GetArmyIndex()
+    local facIndex = aiBrain:GetFactionIndex()
+    local factories = aiBrain:GetListOfUnits( categories.FACTORY * categories.LAND * (categories.TECH3 + categories.TECH2), false)
+    if table.getn(factories) > 0 then
+        if facIndex == 1 and factories[1]:CanBuild('uel0307') then
+            return true
+        elseif facIndex == 2 and factories[2]:CanBuild('ual0307') then
+            return true
+        elseif factories[3]:CanBuild('url0306') then
+            return true
+        else
+            return false
+        end
+    else
+        return false
+    end
+end
+
 ---HeavyLandAttackMasterCountDifficulty = BuildCondition   doc = "Please work function docs."
 ---@param aiBrain AIBrain
 ---@param master string
@@ -173,27 +194,6 @@ function HeavyLandAttackMasterCountDifficulty(aiBrain, master)
     if directFireCounter >= directFireNum and artilleryCounter >= artilleryNum and 
         antiAirCounter >= antiAirNum and (defensiveCounter >= defensiveNum or not CheckDefensiveBuildable(aiBrain) )then
         return true
-    else
-        return false        
-    end
-end
-
----@param aiBrain AIBrain
----@return boolean
-function CheckDefensiveBuildable(aiBrain)
-    local armyIndex = aiBrain:GetArmyIndex()
-    local facIndex = aiBrain:GetFactionIndex()
-    local factories = aiBrain:GetListOfUnits( categories.FACTORY * categories.LAND * (categories.TECH3 + categories.TECH2), false)
-    if table.getn(factories) > 0 then
-        if facIndex == 1 and factories[1]:CanBuild('uel0307') then
-            return true
-        elseif facIndex == 2 and factories[2]:CanBuild('ual0307') then
-            return true
-        elseif factories[3]:CanBuild('url0306') then
-            return true
-        else
-            return false
-        end
     else
         return false
     end
