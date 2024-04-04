@@ -762,7 +762,7 @@ AIBrain = Class(StandardBrain) {
 
     ---Adds a new build location
     ---@param self CampaignAIBrain
-    ---@param loc Vector
+    ---@param loc Vector|string
     ---@param radius number
     ---@param locType string
     ---@param useCenterPoint? boolean
@@ -873,7 +873,7 @@ AIBrain = Class(StandardBrain) {
     end,
 
     ---@param self CampaignAIBrain
-    ---@param location Vector
+    ---@param location Vector | string
     ---@return FactoryUnit[] | false
     PBMGetAllFactories = function(self, location)
         if not location then
@@ -902,7 +902,7 @@ AIBrain = Class(StandardBrain) {
     --- IF either is nil, then it will do the other.
     --- This way you can remove all of one type or all of one rectangle
     ---@param self CampaignAIBrain
-    ---@param loc Vector
+    ---@param loc? Vector
     ---@param locType string
     PBMRemoveBuildLocation = function(self, loc, locType)
         for k, v in self.PBM.Locations do

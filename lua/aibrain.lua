@@ -536,7 +536,7 @@ local BrainGetUnitsAroundPoint = moho.aibrain_methods.GetUnitsAroundPoint
 local BrainGetListOfUnits = moho.aibrain_methods.GetListOfUnits
 local CategoriesDummyUnit = categories.DUMMYUNIT
 
----@class AIBrain: AIBrainHQComponent, AIBrainStatisticsComponent, AIBrainJammerComponent, AIBrainEnergyComponent, moho.aibrain_methods
+---@class AIBrain: AIBrainHQComponent, AIBrainStatisticsComponent, AIBrainJammerComponent, AIBrainEnergyComponent, moho.aibrain_methods, boolean
 ---@field AI boolean
 ---@field Name string           # Army name
 ---@field Nickname string       # Player / AI / character name
@@ -547,6 +547,13 @@ local CategoriesDummyUnit = categories.DUMMYUNIT
 ---@field UnitBuiltTriggerList table
 ---@field PingCallbackList { CallbackFunction: fun(pingData: any), PingType: string }[]
 ---@field BrainType 'Human' | 'AI'
+---@field BaseTemplates table
+---@field BaseManagers table
+---@field AttackData table
+---@field AttackManager table
+---@field BuilderManagers table
+---@field IntelData table
+---@field PBM table
 AIBrain = Class(AIBrainHQComponent, AIBrainStatisticsComponent, AIBrainJammerComponent, AIBrainEnergyComponent,
     moho.aibrain_methods) {
 
@@ -1401,7 +1408,7 @@ AIBrain = Class(AIBrainHQComponent, AIBrainStatisticsComponent, AIBrainJammerCom
 
     --- Retrieves all units that fit the criteria around some point. Excludes dummy units.
     ---@param self AIBrain
-    ---@param category EntityCategory The categories the units should fit.
+    ---@param category EntityCategory|string The categories the units should fit.
     ---@param position Vector The center point to start looking for units.
     ---@param radius number The radius of the circle we look for units in.
     ---@param alliance AllianceStatus

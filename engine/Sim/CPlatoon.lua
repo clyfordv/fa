@@ -19,7 +19,7 @@ end
 
 --- Orders platoon to attack mote to target position..
 -- If squad is specified, attack moves only with the squad.
----@param position Vector Table with position {x, y, z}.
+---@param position? Vector Table with position {x, y, z}.
 ---@param squad PlatoonSquadType?
 ---@return PlatoonCommand
 function CPlatoon:AggressiveMoveToLocation(position, squad)
@@ -131,7 +131,7 @@ function CPlatoon:GetAIPlan()
 end
 
 --- Returns army brain of the platoon.
----@return AIBrain
+---@return AIBrain|CampaignAIBrain
 function CPlatoon:GetBrain()
 end
 
@@ -154,7 +154,7 @@ function CPlatoon:GetPlatoonLifetimeStats()
 end
 
 --- Computes the average platoon position, returns nil if the platoon has no units
----@return Vector?
+---@return Vector
 function CPlatoon:GetPlatoonPosition()
 end
 
@@ -252,7 +252,7 @@ end
 --- Orders platoon to patrol at target position.
 -- If squad is specified, patrols only with the squad.
 ---@param position Vector Table with position {x, y, z}.
----@param squad PlatoonSquadType
+---@param squad? PlatoonSquadType
 ---@return PlatoonCommand
 function CPlatoon:Patrol(position, squad)
 end

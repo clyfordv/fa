@@ -139,6 +139,9 @@ local cUnitGetBuildRate = cUnit.GetBuildRate
 ---@field SiloProjectile? ProjectileBlueprint
 ---@field ReclaimTimeMultiplier? number
 ---@field CaptureTimeMultiplier? number
+---@field BaseName string
+---@field CDRData table
+---@field PlatoonData table
 Unit = ClassUnit(moho.unit_methods, IntelComponent, VeterancyComponent) {
 
     IsUnit = true,
