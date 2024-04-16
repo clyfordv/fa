@@ -85,6 +85,8 @@ BaseTransport = ClassSimple {
         end
         self.CargoVetMass = mass
         self.CargoVetNum = num
+        LOG('CargoVetMass: ' .. mass)
+        LOG('CargoVetNum: ' .. num)
     end
 }
 
