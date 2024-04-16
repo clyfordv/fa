@@ -641,7 +641,7 @@ VeterancyComponent = ClassSimple {
     --- Disperses the veterancy, expects to be only called once
     ---@param self VeterancyComponent | Unit
     VeterancyDispersal = function(self)
-        local vetWorth = self:GetFractionComplete() * self:GetTotalMassCost()
+        local vetWorth = self:GetFractionComplete() * self:GetTotalMassCost() + (self.CargoVetMass or 0)
         local vetDamage = self.VetDamage
         local vetInstigators = self.VetInstigators
         local vetDamageTaken = self.VetDamageTaken
@@ -787,7 +787,7 @@ VeterancyComponent = ClassSimple {
         end
 
         if not IsDestroyed(unitThatIsDying) then
-            local vetWorth = unitThatIsDying:GetFractionComplete() * unitThatIsDying:GetTotalMassCost()
+            local vetWorth = unitThatIsDying:GetFractionComplete() * unitThatIsDying:GetTotalMassCost()  + (unitThatIsDying.CargoVetMass or 0)
             self:AddVetExperience(vetWorth, false)
         end
     end,
@@ -820,9 +820,9 @@ VeterancyComponent = ClassSimple {
         local fractionComplete = self:GetFractionComplete()
         local unitMass = self:GetTotalMassCost()
         local vetMult = self.Blueprint.VeteranImportanceMult or 1
-        local cargoMass = self.cargoMass or 0
+        local cargoVetMass = self.CargoVetMass or 0
         -- Allow units to count for more or less than their real mass if needed
-        return fractionComplete * unitMass * vetMult + cargoMass
+        return fractionComplete * unitMass * vetMult + cargoVetMass
     end,
 }
 

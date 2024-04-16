@@ -85,7 +85,7 @@ AircraftCarrier = ClassUnit(SeaUnit, BaseTransport) {
     ---@param type string
     ---@param overkillRatio number
     OnKilled = function(self, instigator, type, overkillRatio)
-        self:SaveCargoMass()
+        self:SaveCargoVeterancy()
         SeaUnitOnKilled(self, instigator, type, overkillRatio)
         self:DetachCargo()
     end,

@@ -76,13 +76,15 @@ BaseTransport = ClassSimple {
     end,
 
     ---@param self BaseTransport | Unit
-    SaveCargoMass = function(self)
+    SaveCargoVeterancy = function(self)
         local mass = 0
+        local num = 0
         for _, unit in self:GetCargo() do
             mass = mass + unit:GetVeterancyValue()
-            unit.veterancyDispersed = true
+            num = num + 1
         end
-        self.cargoMass = mass
+        self.CargoVetMass = mass
+        self.CargoVetNum = num
     end
 }
 

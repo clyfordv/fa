@@ -152,7 +152,7 @@ AirTransport = ClassUnit(AirUnit, BaseTransport) {
         if self.Dead then return end -- Bail out early from overkill damage when already dead to avoid crashing
 
         if not suicide then -- If the transport is self destructed, let its contents be self destructed separately
-            self:SaveCargoMass()
+            self:SaveCargoVeterancy()
         end
         self.cargo = {}
         local cargo = self:GetCargo()
