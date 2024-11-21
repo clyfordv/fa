@@ -63,6 +63,19 @@ TechTabCluster = ClassUI(RadioCluster) {
 
         -- Call our RadioCluster constructor with our new list of checkboxes
         RadioCluster.__init(self, parent, TechTabCheckboxes)
+
+        -- Define mouseover and click sounds
+        for _, checkbox in self.items do
+            checkbox.HandleEvent = function(self, event)
+                if event.Type == 'MouseEnter' then
+                    PlaySound(Sound({Bank = 'Interface', Cue = 'UI_Tab_Rollover_02'}))
+                elseif event.Type == 'ButtonPress' then
+                    PlaySound(Sound({Bank = 'Interface', Cue = 'UI_Tab_Click_02'}))
+                end
+                Checkbox.HandleEvent(self, event)
+            end
+        end
+
         parent:AddOnSelectionCallback(self, self.OnSelection)
         self.Callback = Callback
 

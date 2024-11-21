@@ -39,6 +39,18 @@ ConstructionTabCluster = ClassUI(RadioCluster) {
     __init = function(self, parent, Callback)
         RadioCluster.__init(self, parent, TabCheckboxes)
 
+        -- Define mouseover and click sounds
+        for _, checkbox in self.items do
+            checkbox.HandleEvent = function(self, event)
+                if event.Type == 'MouseEnter' then
+                    PlaySound(Sound({Bank = 'Interface', Cue = 'UI_Tab_Rollover_02'}))
+                elseif event.Type == 'ButtonPress' then
+                    PlaySound(Sound({Bank = 'Interface', Cue = 'UI_Tab_Click_02'}))
+                end
+                Checkbox.HandleEvent(self, event)
+            end
+        end
+
         parent:AddOnSelectionCallback(self, self.OnSelection)
         import('/lua/ui/controls/construction/layouts/bottomMini/constructiontabcluster.lua').InitLayoutFunctions(self)
         self.Callback = Callback
