@@ -28,9 +28,9 @@ controls = import("/lua/ui/controls.lua").Get()
 
 ---@class OrderButton : Checkbox, MauiCheckbox
 ---@field _order string
----@field _data table
+---@field _data OrderInfo
 ---@field _curHelpText string
----@field _toggleMode integer
+---@field _toggleMode OrderToggleMode
 ---@field _toggleState number|boolean
 ---@field mixedModeIcon Bitmap
 ---@field toggleModeIcon Bitmap
@@ -40,8 +40,10 @@ controls = import("/lua/ui/controls.lua").Get()
 ---@field _unit UserUnit
 ---@field _pod UserUnit[]
 ---@field buttonText Text
----@field _OnFirestateSelection function
----@field _toggleIcon Bitmap
+---@field _OnFirestateSelection? fun(button: OrderButton, newState: integer|boolean, id: FireState)
+---@field _popup? FireStatePopup
+---@field _toggleIcon? Bitmap
+---@field _mixedIcon? Bitmap
 
 -- Positioning controls, don't belong to file
 local layoutVar = false
@@ -120,7 +122,7 @@ local function CreateAutoBuildEffect(parent)
 end
 
 ---@param parent Control
----@param ID string
+---@param ID string # ID from `lua/ui/help/tooltips.lua`
 function CreateMouseoverDisplay(parent, ID)
     if controls.mouseoverDisplay then
         controls.mouseoverDisplay:Destroy()
@@ -147,6 +149,7 @@ local function CreateOrderButtonGrid()
 end
 
 -- Local logic data
+---@type table<CommandCap, OrderButton>
 local orderCheckboxMap = {}
 ---@type UserUnit[]
 local currentSelection = nil
@@ -183,11 +186,17 @@ local function StandardOrderBehavior(self, modifiers)
     end
 end
 
+---@alias OrderToggleMode
+---| 0 # no units found
+---| 1 # all units toggled on
+---| 2 # all units toggled off
+---| 3 # mixed
+
 --TODO: set up these functions so they are abstracted for all orders, so you can check them for anything like OC, diving, production, whatever.
---returns 0 for no units found, 1 for only snipes on, 2 for only snipes off, 3 for mixed.
 ---@param unitList UserUnit[]
----@param variable string
----@param value string
+---@param variable string # Sync'd UnitData key to check in
+---@param value string # Sync'd UnitData value to check for
+---@return OrderToggleMode
 local function IsToggleMode(unitList, variable, value)
 
     local toggleStateTrue
@@ -409,7 +418,7 @@ function StopOrderBehavior(self, modifiers)
     end
 end
 
--- Used by things that build weapons, etc
+-- Used by units that build silo ammo
 ---@param modifiers EventModifiers
 local function BuildOrderBehavior(self, modifiers)
     if modifiers.Left then
@@ -430,6 +439,9 @@ local function BuildOrderBehavior(self, modifiers)
     end
 end
 
+-- Used by units that build silo ammo
+---@param control OrderButton
+---@param unitList UserUnit[]
 local function BuildInitFunction(control, unitList)
     local isAutoMode = GetIsAutoMode(unitList)
     control:SetCheck(isAutoMode)
@@ -558,7 +570,6 @@ function ToggleDiveOrder()
 end
 
 -- Pause button specific behvior
--- TODO pause button will be moved to construction manager
 ---@param self OrderButton
 ---@param modifiers EventModifiers
 local function PauseOrderBehavior(self, modifiers)
@@ -684,7 +695,8 @@ end
 
 ---@param self OrderButton
 ---@param modifiers EventModifiers
----@param subState boolean
+---@param subState boolean | number
+---@return boolean?
 local function StatToggleOrderBehavior(self, modifiers, subState)
     local state
     if subState ~= nil then
@@ -798,18 +810,26 @@ local function DroneInit(self, selection)
 
 end
 
+---@param self OrderButton
+---@param modifiers EventModifiers
 local function ExternalFactoryBehavior(self, modifiers)
     if modifiers.Left then
         SelectUnits(self._unit)
     end
 end
 
+---@class OrderUIRetaliateStateData
+---@field bitmap "stand-ground" | "return-fire" | "hold-fire" | "stand-ground"
+---@field helpText "mode_mixed" | "mode_return_fire" | "mode_hold_fire" | "mode_hold_ground"
+---@field id? FireStateString
+
 -- Retaliate button specific behvior
+---@type table<-1 | FireState, OrderUIRetaliateStateData>
 local retaliateStateInfo = {
-    [-1] = {bitmap = 'stand-ground',    helpText = "mode_mixed"},
-    [0] = {bitmap = 'return-fire',     helpText = "mode_return_fire", id = 'ReturnFire'},
-    [1] = {bitmap = 'hold-fire',       helpText = "mode_hold_fire", id = 'HoldFire'},
-    [2] = {bitmap = 'stand-ground',    helpText = "mode_hold_ground", id = 'HoldGround'},
+    [-1] = { bitmap = 'stand-ground',   helpText = 'mode_mixed' },
+    [0]  = { bitmap = 'return-fire',    helpText = 'mode_return_fire',  id = 'ReturnFire' },
+    [1]  = { bitmap = 'hold-fire',      helpText = 'mode_hold_fire',    id = 'HoldFire' },
+    [2]  = { bitmap = 'stand-ground',   helpText = 'mode_hold_ground',  id = 'HoldGround' },
 }
 
 ---@param parent Bitmap
@@ -856,17 +876,27 @@ local function CreateBorder(parent)
     return border
 end
 
+---@class FireStatePopup : Bitmap
+---@field buttons table<number, Checkbox>
+
 ---@param parent OrderButton
-local function CreateFirestatePopup(parent, selected)
+---@param toggleState boolean|number
+---@return FireStatePopup
+local function CreateFirestatePopup(parent, toggleState)
     local bg = Bitmap(parent, UIUtil.UIFile('/game/ability_brd/chat_brd_m.dds'))
 
     bg.border = CreateBorder(bg)
     bg:DisableHitTest(true)
-
+    ---@param index integer
+    ---@param info OrderUIRetaliateStateData
+    ---@return MauiCheckbox
     local function CreateButton(index, info)
         local btn = Checkbox(bg, GetOrderBitmapNames(info.bitmap))
         btn.info = info
         btn.index = index
+        ---@param control Checkbox | { info: OrderUIRetaliateStateData, index: integer }
+        ---@param event KeyEvent
+        ---@return boolean
         btn.HandleEvent = function(control, event)
             if event.Type == 'MouseEnter' then
                 CreateMouseoverDisplay(control, control.info.helpText)
@@ -878,6 +908,8 @@ local function CreateFirestatePopup(parent, selected)
             end
             return Checkbox.HandleEvent(control, event)
         end
+        ---@param control Checkbox | { info: OrderUIRetaliateStateData, index: integer }
+        ---@param checked boolean
         btn.OnCheck = function(control, checked)
             parent:_OnFirestateSelection(control.index, control.info.id)
         end
@@ -916,8 +948,8 @@ end
 local function RetaliateOrderBehavior(self, modifiers)
     if not self._OnFirestateSelection then
         ---@param button OrderButton
-        ---@param newState integer|boolean
-        ---@param id FireState
+        ---@param newState integer
+        ---@param id FireStateString
         self._OnFirestateSelection = function(button, newState, id)
             button._toggleState = newState
             SetFireState(currentSelection, id)
@@ -1002,7 +1034,7 @@ end
 
 ---@param button OrderButton
 local function NukeBtnText(button)
-    if not currentSelection[1] or currentSelection[1].Dead then return '' end
+    if not currentSelection[1] or currentSelection[1]:IsDead() then return '' end
     if table.getsize(currentSelection) > 1 then
         button.buttonText:SetColor('fffff600')
         return '?'
@@ -1019,7 +1051,7 @@ end
 
 ---@param button OrderButton
 local function TacticalBtnText(button)
-    if not currentSelection[1] or currentSelection[1].Dead then return '' end
+    if not currentSelection[1] or currentSelection[1]:IsDead() then return '' end
     if table.getsize(currentSelection) > 1 then
         button.buttonText:SetColor('fffff600')
         return '?'
@@ -1119,7 +1151,7 @@ end
 
 function EnterOverchargeMode()
     local unit = currentSelection[1]
-    if not unit or unit.Dead or unit:IsOverchargePaused() then return end
+    if not unit or unit:IsDead() or unit:IsOverchargePaused() then return end
     local bp = unit:GetBlueprint()
     local weapon = FindOCWeapon(unit:GetBlueprint())
     if not weapon then return end
@@ -1134,7 +1166,7 @@ end
 ---@param deltaTime number
 local function OverchargeFrame(self, deltaTime)
     local unit = currentSelection[1]
-    if not unit or unit.Dead then return end
+    if not unit or unit:IsDead() then return end
     local weapon = FindOCWeapon(unit:GetBlueprint())
     if not weapon then
         self:SetNeedsFrameUpdate(false)
@@ -1221,6 +1253,7 @@ end
 ---@field onframe? fun(control: Control, delta: number)
 ---@field ButtonTextFunc? fun(button: Button): string
 ---@field extraInfo? any
+---@field statToggle 'AutoDeploy' | string # Which stat from the unit blueprint's StatToggles to set. Used by external factory AutoDeploy.
 
 
 --- Sets up an orderInfo for each order that comes in
@@ -1311,10 +1344,11 @@ The orderInfo format is:
 Since this is a table, if you need any more information, for instance, the command to be emmited from the OnClick
 you can add it to the table and it will be ignored, so you're safe to put whatever info you need in to it. When the
 OnClick callback is called, self._data will contain this info.
---]]
----@param orderInfo table
+]]
+---@param orderInfo OrderInfo
 ---@param slot integer
 ---@param batchMode boolean
+---@return OrderButton
 local function AddOrder(orderInfo, slot, batchMode)
     batchMode = batchMode or false
 
@@ -1844,7 +1878,7 @@ function CreateControls()
     end
 end
 
----@param layout any
+---@param layout any # Sets the unused local `layoutVar`. `layouts.lua` is imported instead for the layouting of controls.
 function SetLayout(layout)
     layoutVar = layout
 
@@ -1866,7 +1900,8 @@ end
 
 -- Called from gamemain to create control
 ---@param parent Control
----@param mfd Control
+---@param mfd Control # reference to multifunction display
+---@return Bitmap
 function SetupOrdersControl(parent, mfd)
     controls.controlClusterGroup = parent
     controls.mfdControl = mfd
