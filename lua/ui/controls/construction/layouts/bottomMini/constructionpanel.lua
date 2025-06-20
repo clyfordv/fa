@@ -124,28 +124,20 @@ OnLayout = function(self)
 
     -- Because these are visual elements that don't interact outside
     -- of the layout, we can initialize them here if they are not already
-    if not self.bgMainCapL then self.bgMainCapL = Bitmap(self) end -- Left cap bitmap, under the pause/repeat build buttons
-    if not self.bgMainCapR then self.bgMainCapR = Bitmap(self) end -- Right cap bitmap, at the rightmost edge of the panel
-    if not self.bgTechTabBody then self.bgTechTabBody = Bitmap(self) end -- Background element that pops up behind the tech level radio buttons
-    if not self.bgTechTabCapR then self.bgTechTabCapR = Bitmap(self) end-- Rightside cap for the tech tab background (bgMainCapL is the left cap)
-    if not self.bgMainBody then self.bgMainBody = Bitmap(self) end-- Main body of our background
-
-    if not self.rightBracketLower then self.rightBracketLower = Bitmap(self) end -- Brackets at the right edge of the panel
-    if not self.rightBracketUpper then self.rightBracketUpper = Bitmap(self) end
-    if not self.rightBracketMiddle then self.rightBracketMiddle = Bitmap(self) end
-
-    -- We're expecting these elements to already be initialized
-    -- If they are not, we should throw a warning
-    if not self.constructionTabCluster then
-        WARN('layouts/bottomMini/constructionpanel.lua Layout: ConstructionTabCluster not initialized!')
+    if not self.initialized then
+        self.bgMainCapL = Bitmap(self) -- Left cap bitmap, under the pause/repeat build buttons
+        self.bgMainCapR = Bitmap(self) -- Right cap bitmap, at the rightmost edge of the panel
+        self.bgTechTabBody = Bitmap(self) -- Background element that pops up behind the tech level radio buttons
+        self.bgTechTabCapR = Bitmap(self) -- Rightside cap for the tech tab background (bgMainCapL is the left cap)
+        self.bgMainBody = Bitmap(self) -- Main body of our background
+        self.rightBracketLower = Bitmap(self) -- Brackets at the right edge of the panel
+        self.rightBracketUpper = Bitmap(self)
+        self.rightBracketMiddle = Bitmap(self) -- Middle bracket that fills the gap
+        self.initialized = true
     end
-    
-    if not self.techTabCluster then
-        WARN('layouts/bottomMini/constructionpanel.lua Layout: TechTabCluster not initialized!')
-    end
+
 end
 
----comment
 ---@param self ConstructionPanel
 ---@param key? string -- Pass a key here to apply a layout from the SubLayout table instead (the main layout function is skipped)
 Layout = function(self, key)
@@ -219,6 +211,19 @@ Layout = function(self, key)
     self.pauseButton:SetIconTextures(GetIconTextures('pause'))
     Layouter(self.pauseButton)
         :Below(self.repeatBuildTemplateButton, 1)
+        :End()
+
+    -- Scroll panels
+    Layouter(self.scrollPanelA)
+        :RightOf(self.repeatBuildTemplateButton, 1)
+        :AtRightIn(self.bgMainCapR, -1)
+        :FillVertically(self.repeatBuildTemplateButton)
+        :End()
+
+    Layouter(self.scrollPanelB)
+        :Below(self.scrollPanelA, 1)
+        :FillHorizontally(self.scrollPanelA)
+        :FillVertically(self.pauseButton)
         :End()
 end
 

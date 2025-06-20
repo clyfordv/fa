@@ -1,5 +1,5 @@
 --******************************************************************************************************
---** Copyright (c) 2024 FAForever
+--** Copyright (c) 2025 FAForever
 --**
 --** Permission is hereby granted, free of charge, to any person obtaining a copy
 --** of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@ local Layouter = LayoutHelpers.ReusedLayoutFor
 local Bitmap = import('/lua/maui/bitmap.lua').Bitmap
 local SkinnableFile = import('/lua/ui/uiutil.lua').SkinnableFile
 
-local backgroundTextures = {
+local bgTextures = {
     left = SkinnableFile('/game/construct-panel/que-panel_bmp_l.dds'),
     middle = SkinnableFile('/game/construct-panel/que-panel_bmp_m.dds'),
     right = SkinnableFile('/game/construct-panel/que-panel_bmp_r.dds'),
@@ -74,13 +74,70 @@ InitLayoutFunctions = function(control)
 end
 
 OnLayout = function(self)
-
     if not self.initialized then
-        self.bgCapLeft = Bitmap(self)
-        self.bgCapRight = Bitmap(self)
-        self.bgMiddle = Bitmap(self)
+        self.bgCapL = Bitmap(self)
+        self.bgMid = Bitmap(self)
+        self.bgCapR = Bitmap(self)
+        self.initialized = true
     end
 end
 
-Layout = function(self)
+Layout = function(self, key)
+
+    Layouter(self.bgCapL)
+        :Texture(bgTextures.left)
+        :AtLeftTopIn(self, 1)
+        :WidthFromTexture(bgTextures.left)
+        :FillVertically(self)
+        :End()
+
+    Layouter(self.bgCapR)
+        :Texture(bgTextures.right)
+        :AtRightTopIn(self, 1)
+        :WidthFromTexture(bgTextures.right)
+        :FillVertically(self)
+        :End()
+
+    Layouter(self.bgMid)
+        :Texture(bgTextures.middle)
+        :RightOf(self.bgCapL)
+        :LeftOf(self.bgCapR)
+        :FillVertically(self)
+        :End()
+
+    local txtr = buttonTextures.left
+    self.skipBackButton:SetNewTextures(txtr.up, txtr.down, txtr.over, txtr.dis)
+    self.skipBackButton:SetIconTextures(GetIconTextures('skipBack'))
+
+    txtr = buttonTextures.right
+    self.skipForwardButton:SetNewTextures(txtr.up, txtr.down, txtr.over, txtr.dis)
+    self.skipForwardButton:SetIconTextures(GetIconTextures('skipForward'))
+
+    txtr = buttonTextures.middle
+    self.backButton:SetNewTextures(txtr.up, txtr.down, txtr.over, txtr.dis)
+    self.backButton:SetIconTextures(GetIconTextures('back'))
+
+    self.forwardButton:SetNewTextures(txtr.up, txtr.down, txtr.over, txtr.dis)
+    self.forwardButton:SetIconTextures(GetIconTextures('forward'))
+
+    Layouter(self.skipBackButton)
+        :AtLeftTopIn(self)
+        :DimensionsFromTexture(buttonTextures.left.up)
+        :End()
+
+    Layouter(self.skipForwardButton)
+        :AtRightTopIn(self)
+        :DimensionsFromTexture(buttonTextures.right.up)
+        :End()
+
+    Layouter(self.backButton)
+        :RightOf(self.skipBackButton)
+        :DimensionsFromTexture(buttonTextures.middle.up)
+        :End()
+
+    Layouter(self.forwardButton)
+        :LeftOf(self.skipForwardButton)
+        :DimensionsFromTexture(buttonTextures.middle.up)
+        :End()
+
 end

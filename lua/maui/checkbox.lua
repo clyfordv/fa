@@ -192,6 +192,7 @@ IconCheckbox = Class(Checkbox) {
         else
             self.icon:SetAlpha(0)
         end
+        return self
     end,
 
     ---@param self IconCheckbox

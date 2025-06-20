@@ -258,111 +258,111 @@ end
 
 function CreateUI()
     controls.constructionGroup = ConstructionPanel(controlClusterGroup) -- Overall container for the construction UI
-    controls.minBG = Bitmap(controls.constructionGroup) -- Leftmost bg section for construction panel
-    controls.maxBG = Bitmap(controls.constructionGroup) -- Rightmost bg section for construction panel
-    controls.midBG1 = Bitmap(controls.constructionGroup) -- Bg section under tech tab
-    controls.midBG2 = Bitmap(controls.constructionGroup) -- Small bg connecting tech tab to main panel
-    controls.midBG3 = Bitmap(controls.constructionGroup) -- Bg section that stretches to right of screen
-    controls.choices = SpecialGrid(controls.constructionGroup, false) -- Main grid for build options
-    controls.choicesBGMin = Bitmap(controls.constructionGroup) -- Leftmost bg section for build options
-    controls.choicesBGMid = Bitmap(controls.constructionGroup) -- Middle bg section for build options
-    controls.choicesBGMax = Bitmap(controls.constructionGroup) -- Rightmost bg section for build options
-    controls.scrollMin = IconButton(controls.choices) -- Top left inner scroll button (play button)
-    controls.scrollMax = Button(controls.choices) -- Top right inner scroll button (play button)
-    controls.scrollMinIcon = Button(controls.choices) -- Icon for scroll button
-    controls.scrollMaxIcon = Button(controls.choices) -- Icon for scroll button
-    controls.pageMin = Button(controls.choices) -- Top left outer skip button
-    controls.pageMax = Button(controls.choices) -- Top right outer skip button
-    controls.pageMinIcon = Button(controls.choices) -- Icon for skip button
-    controls.pageMaxIcon = Button(controls.choices) -- Icon for skip button
-    controls.secondaryChoices = SpecialGrid(controls.constructionGroup, false) -- Lower grid for cargo/queue etc.
-    controls.secondaryChoicesBGMin = Bitmap(controls.constructionGroup) -- same as choices
-    controls.secondaryChoicesBGMid = Bitmap(controls.constructionGroup) -- ""
-    controls.secondaryChoicesBGMax = Bitmap(controls.constructionGroup) -- ""
-    controls.secondaryScrollMin = Button(controls.secondaryChoices) -- ""
-    controls.secondaryScrollMax = Button(controls.secondaryChoices) -- ""
-    controls.secondaryScrollMinIcon = Button(controls.secondaryChoices) -- ""
-    controls.secondaryScrollMaxIcon = Button(controls.secondaryChoices) -- ""
-    controls.secondaryPageMin = Button(controls.secondaryChoices) -- ""
-    controls.secondaryPageMax = Button(controls.secondaryChoices) -- ""
-    controls.secondaryPageMinIcon = Button(controls.secondaryChoices) -- ""
-    controls.secondaryPageMaxIcon = Button(controls.secondaryChoices) -- ""
-    controls.leftBracketMin = Bitmap(controls.constructionGroup) -- lower left end bracket
-    controls.leftBracketMax = Bitmap(controls.constructionGroup) -- upper left end bracket
-    controls.leftBracketMid = Bitmap(controls.constructionGroup) -- middle left end bracket
-    controls.rightBracketMin = Bitmap(controls.constructionGroup) -- lower right end bracket
-    controls.rightBracketMax = Bitmap(controls.constructionGroup) -- upper right end bracket
-    controls.rightBracketMid = Bitmap(controls.constructionGroup) -- middle right end bracket
-    controls.extraBtn1 = Checkbox(controls.minBG) -- pause button
-    controls.extraBtn1.icon = Bitmap(controls.extraBtn1) -- pause icon
-    controls.extraBtn1.icon.OnTexture = UIUtil.SkinnableFile('/game/construct-sm_btn/pause_on.dds')
-    controls.extraBtn1.icon.OffTexture = UIUtil.SkinnableFile('/game/construct-sm_btn/pause_off.dds')
-    LayoutHelpers.AtCenterIn(controls.extraBtn1.icon, controls.extraBtn1)
-    controls.extraBtn1.icon:DisableHitTest()
+    -- controls.minBG = Bitmap(controls.constructionGroup) -- Leftmost bg section for construction panel
+    -- controls.maxBG = Bitmap(controls.constructionGroup) -- Rightmost bg section for construction panel
+    -- controls.midBG1 = Bitmap(controls.constructionGroup) -- Bg section under tech tab
+    -- controls.midBG2 = Bitmap(controls.constructionGroup) -- Small bg connecting tech tab to main panel
+    -- controls.midBG3 = Bitmap(controls.constructionGroup) -- Bg section that stretches to right of screen
+    -- controls.choices = SpecialGrid(controls.constructionGroup, false) -- Main grid for build options
+    -- controls.choicesBGMin = Bitmap(controls.constructionGroup) -- Leftmost bg section for build options
+    -- controls.choicesBGMid = Bitmap(controls.constructionGroup) -- Middle bg section for build options
+    -- controls.choicesBGMax = Bitmap(controls.constructionGroup) -- Rightmost bg section for build options
+    -- controls.scrollMin = IconButton(controls.choices) -- Top left inner scroll button (play button)
+    -- controls.scrollMax = Button(controls.choices) -- Top right inner scroll button (play button)
+    -- controls.scrollMinIcon = Button(controls.choices) -- Icon for scroll button
+    -- controls.scrollMaxIcon = Button(controls.choices) -- Icon for scroll button
+    -- controls.pageMin = Button(controls.choices) -- Top left outer skip button
+    -- controls.pageMax = Button(controls.choices) -- Top right outer skip button
+    -- controls.pageMinIcon = Button(controls.choices) -- Icon for skip button
+    -- controls.pageMaxIcon = Button(controls.choices) -- Icon for skip button
+    -- controls.secondaryChoices = SpecialGrid(controls.constructionGroup, false) -- Lower grid for cargo/queue etc.
+    -- controls.secondaryChoicesBGMin = Bitmap(controls.constructionGroup) -- same as choices
+    -- controls.secondaryChoicesBGMid = Bitmap(controls.constructionGroup) -- ""
+    -- controls.secondaryChoicesBGMax = Bitmap(controls.constructionGroup) -- ""
+    -- controls.secondaryScrollMin = Button(controls.secondaryChoices) -- ""
+    -- controls.secondaryScrollMax = Button(controls.secondaryChoices) -- ""
+    -- controls.secondaryScrollMinIcon = Button(controls.secondaryChoices) -- ""
+    -- controls.secondaryScrollMaxIcon = Button(controls.secondaryChoices) -- ""
+    -- controls.secondaryPageMin = Button(controls.secondaryChoices) -- ""
+    -- controls.secondaryPageMax = Button(controls.secondaryChoices) -- ""
+    -- controls.secondaryPageMinIcon = Button(controls.secondaryChoices) -- ""
+    -- controls.secondaryPageMaxIcon = Button(controls.secondaryChoices) -- ""
+    -- controls.leftBracketMin = Bitmap(controls.constructionGroup) -- lower left end bracket
+    -- controls.leftBracketMax = Bitmap(controls.constructionGroup) -- upper left end bracket
+    -- controls.leftBracketMid = Bitmap(controls.constructionGroup) -- middle left end bracket
+    -- controls.rightBracketMin = Bitmap(controls.constructionGroup) -- lower right end bracket
+    -- controls.rightBracketMax = Bitmap(controls.constructionGroup) -- upper right end bracket
+    -- controls.rightBracketMid = Bitmap(controls.constructionGroup) -- middle right end bracket
+    -- controls.extraBtn1 = Checkbox(controls.minBG) -- pause button
+    -- controls.extraBtn1.icon = Bitmap(controls.extraBtn1) -- pause icon
+    -- controls.extraBtn1.icon.OnTexture = UIUtil.SkinnableFile('/game/construct-sm_btn/pause_on.dds')
+    -- controls.extraBtn1.icon.OffTexture = UIUtil.SkinnableFile('/game/construct-sm_btn/pause_off.dds')
+    -- LayoutHelpers.AtCenterIn(controls.extraBtn1.icon, controls.extraBtn1)
+    -- controls.extraBtn1.icon:DisableHitTest()
 
-    controls.extraBtn1.OnDisable = function(self)
-        if controls.extraBtn1.icon then
-            controls.extraBtn1.icon:SetTexture(controls.extraBtn1.icon.OffTexture)
-        end
-        Checkbox.OnDisable(self)
-    end
+    -- controls.extraBtn1.OnDisable = function(self)
+    --     if controls.extraBtn1.icon then
+    --         controls.extraBtn1.icon:SetTexture(controls.extraBtn1.icon.OffTexture)
+    --     end
+    --     Checkbox.OnDisable(self)
+    -- end
 
-    controls.extraBtn1.OnEnable = function(self)
-        controls.extraBtn1.icon:Show()
-        if controls.extraBtn1.icon then
-            controls.extraBtn1.icon:SetTexture(controls.extraBtn1.icon.OnTexture)
-        end
-        Checkbox.OnEnable(self)
-    end
+    -- controls.extraBtn1.OnEnable = function(self)
+    --     controls.extraBtn1.icon:Show()
+    --     if controls.extraBtn1.icon then
+    --         controls.extraBtn1.icon:SetTexture(controls.extraBtn1.icon.OnTexture)
+    --     end
+    --     Checkbox.OnEnable(self)
+    -- end
 
-    --controls.extraBtn1:UseAlphaHitTest(true)
-    controls.extraBtn2 = Checkbox(controls.minBG)
-    controls.extraBtn2.icon = Bitmap(controls.extraBtn2)
-    controls.extraBtn2.icon.OnTexture = UIUtil.SkinnableFile('/game/construct-sm_btn/pause_on.dds')
-    controls.extraBtn2.icon.OffTexture = UIUtil.SkinnableFile('/game/construct-sm_btn/pause_off.dds')
-    LayoutHelpers.AtCenterIn(controls.extraBtn2.icon, controls.extraBtn2)
-    controls.extraBtn2.icon:DisableHitTest()
+    -- --controls.extraBtn1:UseAlphaHitTest(true)
+    -- controls.extraBtn2 = Checkbox(controls.minBG)
+    -- controls.extraBtn2.icon = Bitmap(controls.extraBtn2)
+    -- controls.extraBtn2.icon.OnTexture = UIUtil.SkinnableFile('/game/construct-sm_btn/pause_on.dds')
+    -- controls.extraBtn2.icon.OffTexture = UIUtil.SkinnableFile('/game/construct-sm_btn/pause_off.dds')
+    -- LayoutHelpers.AtCenterIn(controls.extraBtn2.icon, controls.extraBtn2)
+    -- controls.extraBtn2.icon:DisableHitTest()
 
-    controls.extraBtn2.OnDisable = function(self)
-        if controls.extraBtn2.icon then
-            controls.extraBtn2.icon:SetTexture(controls.extraBtn2.icon.OffTexture)
-        end
-        Checkbox.OnDisable(self)
-    end
+    -- controls.extraBtn2.OnDisable = function(self)
+    --     if controls.extraBtn2.icon then
+    --         controls.extraBtn2.icon:SetTexture(controls.extraBtn2.icon.OffTexture)
+    --     end
+    --     Checkbox.OnDisable(self)
+    -- end
 
-    controls.extraBtn2.OnEnable = function(self)
-        controls.extraBtn2.icon:Show()
-        controls.extraBtn2.icon:SetTexture(controls.extraBtn2.icon.OnTexture)
-        Checkbox.OnEnable(self)
-    end
+    -- controls.extraBtn2.OnEnable = function(self)
+    --     controls.extraBtn2.icon:Show()
+    --     controls.extraBtn2.icon:SetTexture(controls.extraBtn2.icon.OnTexture)
+    --     Checkbox.OnEnable(self)
+    -- end
 
-    --controls.extraBtn2:UseAlphaHitTest(true)
-    controls.secondaryProgress = StatusBar(controls.secondaryChoices, 0, 1, false, false,
-        UIUtil.UIFile('/game/unit-over/health-bars-back-1_bmp.dds'),
-        UIUtil.UIFile('/game/unit-over/bar01_bmp.dds'),
-        true, "Unit RO Health Status Bar")
+    -- --controls.extraBtn2:UseAlphaHitTest(true)
+    -- controls.secondaryProgress = StatusBar(controls.secondaryChoices, 0, 1, false, false,
+    --     UIUtil.UIFile('/game/unit-over/health-bars-back-1_bmp.dds'),
+    --     UIUtil.UIFile('/game/unit-over/bar01_bmp.dds'),
+    --     true, "Unit RO Health Status Bar")
 
-    controls.constructionTab = CreateTab(controls.constructionGroup, nil, OnTabCheck)
-    controls.constructionTab.ID = 'construction'
-    Tooltip.AddCheckboxTooltip(controls.constructionTab, 'construction_tab_construction')
-    controls.selectionTab = CreateTab(controls.constructionGroup, nil, OnTabCheck)
-    controls.selectionTab.ID = 'selection'
-    Tooltip.AddCheckboxTooltip(controls.selectionTab, 'construction_tab_attached')
-    controls.enhancementTab = CreateTab(controls.constructionGroup, nil, OnTabCheck)
-    controls.enhancementTab.ID = 'enhancement'
-    Tooltip.AddCheckboxTooltip(controls.enhancementTab, 'construction_tab_enhancement')
+    -- controls.constructionTab = CreateTab(controls.constructionGroup, nil, OnTabCheck)
+    -- controls.constructionTab.ID = 'construction'
+    -- Tooltip.AddCheckboxTooltip(controls.constructionTab, 'construction_tab_construction')
+    -- controls.selectionTab = CreateTab(controls.constructionGroup, nil, OnTabCheck)
+    -- controls.selectionTab.ID = 'selection'
+    -- Tooltip.AddCheckboxTooltip(controls.selectionTab, 'construction_tab_attached')
+    -- controls.enhancementTab = CreateTab(controls.constructionGroup, nil, OnTabCheck)
+    -- controls.enhancementTab.ID = 'enhancement'
+    -- Tooltip.AddCheckboxTooltip(controls.enhancementTab, 'construction_tab_enhancement')
 
-    -- We need this section so that Hotkey labels are kept properly in line with the elements they are attached to, which are reused rather than recreated
-    oldChoicesCalcVisible = controls.choices.CalcVisible
-    controls.choices.CalcVisible = function(self)
-        for i, item in self.Items do
-            if item.hotbuildKeyBg then
-                item.hotbuildKeyBg:Destroy()
-                item.hotbuildKeyText:Destroy()
-            end
-        end
-        oldChoicesCalcVisible(self)
-    end
+    -- -- We need this section so that Hotkey labels are kept properly in line with the elements they are attached to, which are reused rather than recreated
+    -- oldChoicesCalcVisible = controls.choices.CalcVisible
+    -- controls.choices.CalcVisible = function(self)
+    --     for i, item in self.Items do
+    --         if item.hotbuildKeyBg then
+    --             item.hotbuildKeyBg:Destroy()
+    --             item.hotbuildKeyText:Destroy()
+    --         end
+    --     end
+    --     oldChoicesCalcVisible(self)
+    -- end
 end
 
 function OnTabCheck(self, checked)
@@ -2856,7 +2856,7 @@ function SetupConstructionControl(parent, inMFDControl, inOrdersControl)
 
     CreateUI()
 
-    SetLayout(UIUtil.currentLayout)
+    --SetLayout(UIUtil.currentLayout)
 
     return controls.constructionGroup
 end

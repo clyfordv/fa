@@ -27,6 +27,7 @@ local IconCheckbox = import('/lua/maui/checkbox.lua').IconCheckbox
 local ConstructionTabCluster = import('/lua/ui/controls/construction/constructiontabcluster.lua').ConstructionTabCluster
 local TechTabCluster = import('/lua/ui/controls/construction/techtabcluster.lua').TechTabCluster
 local RepeatBuildTemplateCheckbox = import('/lua/ui/controls/construction/repeatbuildcheckbox.lua').RepeatBuildTemplateCheckbox
+local ScrollPanel = import('/lua/ui/controls/construction/scrollpanel.lua').ScrollPanel
 
 -- We only have one selection, so we only need one of these
 local selectionDataTable = {}
@@ -37,6 +38,8 @@ local selectionDataTable = {}
 ---@field techTabCluster TechTabCluster
 ---@field pauseButton IconCheckbox
 ---@field repeatBuildTemplateButton RepeatBuildTemplateCheckbox
+---@field scrollPanelA ScrollPanel
+---@field scrollPanelB ScrollPanel
 ConstructionPanel = ClassUI(Group) {
 
     __init = function(self, parent)
@@ -63,6 +66,12 @@ ConstructionPanel = ClassUI(Group) {
                 self:OnTemplateButtonClicked()
             end
         end
+
+        -- Finally, we have our scroll panels
+        -- These display the dynamic content of the panel like
+        -- units available for construction and build queues
+        self.scrollPanelA = ScrollPanel(self)
+        self.scrollPanelB = ScrollPanel(self)
 
         -- Right now the specific layout is hardcoded, but that can change
         import('/lua/ui/controls/construction/layouts/bottomMini/constructionpanel.lua').InitLayoutFunctions(self)

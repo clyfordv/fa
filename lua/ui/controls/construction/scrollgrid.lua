@@ -19,3 +19,15 @@
 --** OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 --** SOFTWARE.
 --******************************************************************************************************
+
+local Group = import('/lua/maui/group.lua').Group
+
+---@class ScrollGrid : Group
+ScrollGrid = ClassUI(Group) {
+
+    __init = function(self, parent)
+        Group.__init(self, parent)
+        LOG('ScrollGrid: __init')
+    end,
+
+}
